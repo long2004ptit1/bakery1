@@ -1,0 +1,498 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;900&display=swap');
+
+body {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    scroll-padding-top: 2rem;
+    scroll-behavior: smooth;
+}
+
+/* Some Variables */
+:root {
+    --green-color: #004380;
+    --light-green-color: #ffc2c2;
+    --orange-color: #ff7e00;
+    --light-orange-color: #ff7e00;
+    --text-color: #1a2428;
+    --bg-color: #fff;
+}
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+    background: var(--light-green-color);
+}
+
+::-webkit-scrollbar-thumb {
+    width: 0.5rem;
+    background: var(--green-color);
+    border-radius: 5rem;
+}
+
+section {
+    padding: 4.5rem 0 1.5rem;
+}
+
+img {
+    width: 100%;
+}
+
+body {
+    color: var(--text-color);
+}
+
+
+.container {
+    position: relative;
+    width: 100%;
+    min-height: 640px;
+    display: flex;
+    align-items: center;
+    background: url(/Bakery/img/background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden
+    
+}
+
+.container img { 
+    width: 400px;
+    position: absolute;
+    bottom: -500px; 
+    right: 200px;
+}
+
+.home-text {
+    padding: 0 150px;
+}
+
+.home-text span {
+    font-weight: 400; 
+    text-transform: uppercase;
+    color: var(--green-color);
+}
+
+.home-text h1 {
+    font-size: 2.4rem; 
+    font-weight: 700; 
+    margin-bottom: 1rem;
+}
+
+.btn {
+    padding: 0.6rem 1rem;
+    background: var(--green-color);
+    color: var(--bg-color); 
+    font-weight: 400; 
+    border-radius: 5rem; 
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    column-gap: 0.5rem; 
+    max-width: 160px;
+}
+
+.btn .bx {
+    padding: 4px;
+    background: var(--bg-color); 
+    color: var(--text-color); 
+    border-radius: 1rem; 
+    font-size: 20px; 
+    margin: auto;
+}
+
+.btn:hover {
+    background: var(--light-orange-color);
+    transition: 0.2s ease;
+}
+
+
+.swiper-button-next {
+    background: url(/Bakery/img/right-arrow.png); 
+    background-repeat: no-repeat; 
+    background-size: 100% auto; 
+    background-position: center; 
+    margin-right: 20px;
+}
+
+.swiper-button-next::after {
+    display: none;
+}
+
+.swiper-button-prev {
+    background: url(/Bakery/img/left-arrow.png); 
+    background-repeat: no-repeat; 
+    background-size: 100% auto; 
+    background-position: center; 
+    margin-left: 20px;
+}
+
+.swiper-button-prev::after {
+    display: none;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+/* Carousel Styles */
+.carousel {
+    margin-top: 90px;
+    position: relative;
+    max-width: 100%;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-images {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    transition: opacity 0.5s ease;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+}
+
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+.slide {
+    display: none; /* Ẩn tất cả slide theo mặc định */
+}
+
+.slide.active {
+    display: block; /* Chỉ hiển thị slide hiện tại */
+}
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.prev:hover, .next:hover {
+    background-color: #3cb815;
+    color: #fff;
+}
+
+/* Style for Product Section */
+#products {
+    text-align: center;
+    margin-bottom: 30px; /* Thêm khoảng cách dưới tiêu đề */
+}
+
+#products h2 {
+    font-size: 2em;
+    font-weight: 700;
+    margin-bottom: 20px; /* Tạo khoảng cách giữa tiêu đề và lưới sản phẩm */
+    color: #333;
+    margin-top: 10px;
+}
+
+#products h3 {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 20px; /* Tạo khoảng cách giữa tiêu đề và lưới sản phẩm */
+    color: #333;
+    margin-top: 10px;
+}
+
+.product-grid {
+    padding: 50px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-grid h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2em;
+    color: #333;
+}
+
+.product-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.product-card h3 {
+    font-size: 18px;
+    margin: 15px 0;
+    color: #333;
+}
+
+.product-card p {
+    font-size: 16px;
+    color: #007BFF;
+    font-weight: bold;
+}
+.product-card {
+    position: relative; /* Để định vị các nút bên trong khung sản phẩm */
+    overflow: hidden; /* Đảm bảo các phần tử bên trong không tràn ra ngoài */
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cart-icon {
+    position: absolute; /* Định vị tuyệt đối để di chuyển đến góc dưới cùng */
+    bottom: 10px; /* Cách đáy khung 10px */
+    right: 10px; /* Cách bên phải khung 10px */
+    font-size: 24px; /* Kích thước biểu tượng */
+    color: var(--green-color); /* Màu sắc cho biểu tượng */
+    cursor: pointer; /* Thay đổi con trỏ khi di chuột qua */
+    display: block; /* Đảm bảo luôn hiển thị */
+}
+
+.products-container .product-card .bx-cart-alt {
+    position: absolute;
+    right: 0; 
+    bottom: 0; 
+    padding: 10px;
+    background: var(--green-color);
+    color: var(--bg-color); 
+    font-size: 20px;
+    border-radius: 0.5rem 0 0.5rem 0;
+}
+
+.products-container .product-card .bx-cart-alt:hover { 
+    background: var(--orange-color); 
+    transition: 0.2s all linear;
+}
+
+.footer {
+    max-width: 968px; 
+    margin-left: auto; 
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 1.5rem; 
+    margin-top: 2rem;
+    background: #fef4ea; 
+    border-radius: 0.5rem;
+    padding: 20px;
+}
+
+.footer-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-box p {
+    font-size: 0.938rem; 
+    margin: 0.5rem 0 1rem;
+}
+
+.social {
+    display: flex;
+    align-items: center; 
+    column-gap: 0.5rem;
+}
+
+.social .bx {
+    padding: 10px;
+    background: var(--bg-color); 
+    color: var(--green-color); 
+    border-radius: 5rem; 
+    font-size: 20px;
+}
+
+.social .bx:hover {
+    background: var(--green-color);
+    color: var(--bg-color); 
+    transition: 0.2s all linear;
+}
+
+.footer-box h2 {
+    font-size: 1.1rem; 
+    font-weight: 600; 
+    margin-bottom: 1rem;
+}
+
+.footer-box a {
+    color: #868a92;
+    margin-bottom: 1rem;
+}
+
+.footer-box a:hover {
+    color: var(--light-orange-color);
+}
+
+.footer-box form {
+    border-bottom: 1px solid var(--text-color);
+    padding: 10px; 
+    display: flex;
+    align-items: center; 
+    column-gap: 0.5rem;
+}
+
+.footer-box form input { 
+    background: transparent;
+    border: none; 
+    outline: none;
+}
+
+.footer-box form .bxs-envelope { 
+    color: var (--green-color);
+}
+
+.copyright {
+    text-align: center;
+    padding: 20px;
+}
+
+
+/* CSS chính cho product-category */
+.product-category {
+    margin: 0 auto;
+    text-align: center;
+    max-width: 1200px;
+    padding: 20px;
+}
+
+.product-category h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+/* CSS cho products-container bên trong product-category */
+.product-category .products-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+/* CSS cho product-grid */
+.product-category .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Mặc định 4 cột */
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* CSS cho product-card */
+.product-category .product-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.product-category .product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.product-category .product-card h3 {
+    font-size: 18px;
+    margin: 15px 0;
+    color: #333;
+}
+
+.product-category .product-card .price {
+    font-size: 16px;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+/* CSS cho icon giỏ hàng và yêu thích */
+.product-category .product-card .cart-icon,
+.product-category .product-card .heart-icon {
+    font-size: 20px;
+    color: #ff7e00;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.product-category .product-card .cart-icon:hover,
+.product-category .product-card .heart-icon:hover {
+    color: #ff4500;
+    transition: color 0.2s;
+}
+
+/* Responsive: từ 4 cột xuống 3 cột khi màn hình <= 992px */
+@media (max-width: 992px) {
+    .product-category .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Responsive: từ 3 cột xuống 2 cột khi màn hình <= 768px */
+@media (max-width: 768px) {
+    .product-category .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Responsive: từ 2 cột xuống 1 cột khi màn hình <= 576px */
+@media (max-width: 576px) {
+    .product-category .product-grid {
+        grid-template-columns: 1fr;
+    }
+    .product-category .product-card h3 {
+        font-size: 16px;
+    }
+    .product-category .product-card .price {
+        font-size: 14px;
+    }
+}
+
