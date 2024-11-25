@@ -1,198 +1,117 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@page import="com.entity.User"%>
-<%@page import="java.util.List"%>
-<%@page import="com.DB.DBConnect"%>
-<%@page import="com.DAO.UserDAOImpl"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.DAO.StaffDAO, com.DAO.StaffDAOImpl, com.entity.Staff" %>
+<%@ page import="java.util.List"%>
+<%@ page import="java.text.SimpleDateFormat"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Danh Sách Nhân Viên</title>
+    <style>
+        h2 {
+            padding: 20px;
+            font-size: 20px;
+            text-align: center;
+        }
 
+        .staff-table {
+            margin: 50px auto;
+            width: 90%;
+        }
 
-<style>
-h2 {
-	padding: 20px;
-	font-size: 20px;
-}
+        .staff-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-.history-table {
-	margin-top: 100px;
-	margin-left: 50px;
-}
+        .staff-table th, .staff-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
 
-.history-table table {
-	width: 70%;
-	border-collapse: collapse;
-}
+        .staff-table th {
+            background-color: #f2f2f2;
+        }
 
-.history-table table, .history-table th, .history-table td {
-	border: 1px solid #ddd;
-}
+        .btn-edit, .btn-delete {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-.history-table th, .history-table td {
-	padding: 10px;
-	text-align: left;
-	font-size: 16px;
-}
+        .btn-edit {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-.history-table th {
-	background-color: #f2f2f2;
-}
+        .btn-edit:hover {
+            background-color: #45a049;
+        }
 
-.history-table {
-	white-space: nowrap; /* Không ngắt dòng */
-	width: 200px; /* Điều chỉnh chiều rộng theo ý muốn */
-}
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
 
-/*button  */
-.button {
-	font-size: 14px;
-	font-weight: bold;
-	padding: 8px 16px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-}
-
-.btn-approve {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.btn-approve:hover {
-	background-color: #45a049;
-}
-
-.btn-reject {
-	background-color: #f44336;
-	color: white;
-}
-
-.btn-reject:hover {
-	background-color: #d32f2f;
-}
-
-
-/* Căn giữa và thêm khoảng cách cho nút "Thêm sản phẩm" */
-tfoot td {
-    text-align: center;
-    padding: 20px 0; /* Thêm khoảng đệm trên và dưới */
-}
-
-tfoot .button {
-    display: inline-block; /* Hiển thị dạng nút */
-    margin-top: 10px; /* Khoảng cách giữa nút và nội dung khác */
-    padding: 12px 24px; /* Tăng kích thước nút */
-}
-</style>
+        .btn-delete:hover {
+            background-color: #d32f2f;
+        }
+    </style>
 </head>
 <body>
-	<%@include file="header.jsp"%>
+<%@ include file="header.jsp" %>
 
-	<div class="history-table">
-		<h2>Danh sách nhân viên</h2>
+<%-- Thông báo kết quả --%>
+<%
+    String success = request.getParameter("success");
+    String error = request.getParameter("error");
+%>
+<% if ("1".equals(success)) { %>
+    <div style="color: green; text-align: center;">Thao tác thành công!</div>
+<% } else if ("1".equals(error)) { %>
+    <div style="color: red; text-align: center;">Có lỗi xảy ra!</div>
+<% } %>
 
-		<!-- Form tìm kiếm -->
-		<form action="ProductSearchServlet" method="GET"
-			style="margin-bottom: 20px;">
-			<label for="searchKey">Tìm kiếm:</label> <input type="text"
-				id="searchKey" name="searchKey"
-				placeholder="Nhập mã hoặc tên danh mục..."
-				style="padding: 8px; margin-right: 10px;"> <label
-				for="filter">Sắp xếp theo:</label> <select id="filter" name="filter"
-				style="padding: 8px; margin-right: 10px;">
-				<option value="all">Tất cả</option>
-				<option value="id">Danh mục</option>
-				<option value="name">Mã danh mục</option>
-				<option value="price">Số lượng tăng dần</option>
-				<option value="price">Số lương giảm dầm</option>
-				<option value="latest">Mới nhất</option>
-			</select>
+<div class="staff-table">
+    <h2>Danh sách nhân viên</h2>
+    <a href="add_staff.jsp" style="float: right; margin-bottom: 10px; padding: 10px; background: #007BFF; color: white; text-decoration: none; border-radius: 5px;">Thêm Nhân Viên</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Họ tên</th>
+                <th>Số điện thoại</th>
+                <th>Vai trò</th>
+                <th>Thời gian tạo</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                StaffDAO staffDAO = new StaffDAOImpl();
+                List<Staff> staffList = staffDAO.getAllStaff();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
-			<button type="submit"
-				style="padding: 8px 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px;">Tìm
-				kiếm</button>
-		</form>
-		<table>
-			<thead>
-				<tr>
-
-					<th>Mã danh mục</th>
-					<th>Tên danh mục</th>
-					<th>Số lượng sản phẩm</th>
-					<th>Hình ảnh</th>
-					<th>Thời gian tạo</th>
-					<th>Thời gian cập nhật</th>
-					<th>Thao tác</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>SP1</td>
-					<td>Bánh</td>
-					<td>0</td>
-					<td>Hình ảnh</td>
-					<td>Thời gian tạo</td>
-					<td>Thời gian cập nhật</td>
-					<td><a href="" class="button btn-approve">Chỉnh sửa</a> <a
-						href="javascript:void(0);" class="button btn-reject"<%-- onclick="confirmDelete('deleteUser.jsp?id=<%= user.getId() %>') --%>">Xóa</a>
-					</td>
-
-
-				</tr>
-
-
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="11" style="text-align: center;"><a
-						href="add_product.jsp" class="button btn-approve"
-						style="font-size: 16px; padding: 10px 20px;">Thêm danh mục</a></td>
-				</tr>
-			</tfoot>
-		</table>
-	</div>
-
-	<!-- Hộp thoại xác nhận -->
-	<div id="confirm-dialog" style="display: none;">
-		<div
-			style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5);">
-			<div
-				style="background: white; padding: 20px; border-radius: 5px; width: 300px; margin: 15% auto; text-align: center;">
-				<p>Bạn có chắc chắn muốn xóa người dùng này?</p>
-				<div>
-					<button id="confirm-btn"
-						style="margin-right: 10px; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Xác
-						nhận</button>
-					<button onclick="closeDialog()"
-						style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Hủy</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<script>
-		let deleteUrl = "";
-
-		function confirmDelete(url) {
-			deleteUrl = url; // Lưu URL xóa vào biến
-			document.getElementById("confirm-dialog").style.display = "block";
-		}
-
-		function closeDialog() {
-			document.getElementById("confirm-dialog").style.display = "none";
-		}
-
-		document.getElementById("confirm-btn").onclick = function() {
-			// Điều hướng đến URL xóa
-			window.location.href = deleteUrl;
-		};
-	</script>
-
-
+                for (Staff staff : staffList) {
+            %>
+            <tr>
+                <td><%= staff.getId() %></td>
+                <td><%= staff.getName() %></td>
+                <td><%= staff.getPhone() %></td>
+                <td><%= staff.getRole() %></td>
+                <td><%= (staff.getCreatedAt() != null) ? sdf.format(staff.getCreatedAt()) : "N/A" %></td>
+                <td>
+                    <a href="edit_staff.jsp?id=<%= staff.getId() %>" class="btn-edit">Chỉnh sửa</a>
+                    <a href="delete_staff.jsp?id=<%= staff.getId() %>" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>
