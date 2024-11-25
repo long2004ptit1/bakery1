@@ -30,7 +30,7 @@ body::before {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: url('/Bakery/img/background-home.png');
+  background: url('img/background-home.png');
   background-position: center;
   background-size: cover;
 }

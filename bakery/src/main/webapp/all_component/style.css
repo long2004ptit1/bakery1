@@ -11,7 +11,7 @@ body {
     scroll-padding-top: 2rem;
     scroll-behavior: smooth;
 
-    background: url('/Bakery/img/bgproduct.png') no-repeat center center;
+    background: url('../img/bgproduct.png') no-repeat center center;
     background-size: cover; /* Ensures the image covers the entire page */
     background-attachment: fixed; /* Keeps the background fixed during scrolling */
     color: var(--text-color);
@@ -177,7 +177,7 @@ ul {
     min-height: 640px;
     display: flex;
     align-items: center;
-    background: url('/Bakery/img/background-home.png');
+    background: url('/bakery/img/background-home.png');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -237,7 +237,7 @@ ul {
 }
 
 .swiper-button-next {
-    background: url('/Bakery/img/right-arrow.png'); 
+    background: url('../img/right-arrow.png'); 
     background-repeat: no-repeat; 
     background-size: 100% auto; 
     background-position: center; 
@@ -249,7 +249,7 @@ ul {
 }
 
 .swiper-button-prev {
-    background: url('/Bakery/img/left-arrow.png'); 
+    background: url('../img/left-arrow.png'); 
     background-repeat: no-repeat; 
     background-size: 100% auto; 
     background-position: center; 
@@ -341,7 +341,7 @@ ul {
 }
 
 .box1 {
-    background: url('/Bakery/img/background_cate1.png') no-repeat center center;
+    background: url('../img/background_cate1.png') no-repeat center center;
     background-size: cover;
 }
 
@@ -898,7 +898,7 @@ ul {
 }
 /* Container for mousse collection with improved padding */
 .mousse-collection {
-    background: url('/Bakery/img/background-mousse.png') no-repeat center center;
+    background: url('../img/background-mousse.png') no-repeat center center;
     background-size: cover; /* Để đảm bảo ảnh phủ toàn bộ vùng nền */
     padding: 60px 20px;
     display: flex;
