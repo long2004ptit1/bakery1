@@ -1,198 +1,178 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@page import="com.entity.User"%>
-<%@page import="java.util.List"%>
-<%@page import="com.DB.DBConnect"%>
-<%@page import="com.DAO.UserDAOImpl"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.DB.DBConnect" %>
+<%@ page import="com.DAO.CategoryDAOImpl" %>
+<%@ page import="com.entity.Category" %>
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-
-
-<style>
-h2 {
-	padding: 20px;
-	font-size: 20px;
-}
-
-.history-table {
-	margin-top: 100px;
-	margin-left: 50px;
-}
-
-.history-table table {
-	width: 70%;
-	border-collapse: collapse;
-}
-
-.history-table table, .history-table th, .history-table td {
-	border: 1px solid #ddd;
-}
-
-.history-table th, .history-table td {
-	padding: 10px;
-	text-align: left;
-	font-size: 16px;
-}
-
-.history-table th {
-	background-color: #f2f2f2;
-}
-
-.history-table {
-	white-space: nowrap; /* Không ngắt dòng */
-	width: 200px; /* Điều chỉnh chiều rộng theo ý muốn */
-}
-
-/*button  */
-.button {
-	font-size: 14px;
-	font-weight: bold;
-	padding: 8px 16px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-}
-
-.btn-approve {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.btn-approve:hover {
-	background-color: #45a049;
-}
-
-.btn-reject {
-	background-color: #f44336;
-	color: white;
-}
-
-.btn-reject:hover {
-	background-color: #d32f2f;
-}
-
-
-/* Căn giữa và thêm khoảng cách cho nút "Thêm sản phẩm" */
-tfoot td {
-    text-align: center;
-    padding: 20px 0; /* Thêm khoảng đệm trên và dưới */
-}
-
-tfoot .button {
-    display: inline-block; /* Hiển thị dạng nút */
-    margin-top: 10px; /* Khoảng cách giữa nút và nội dung khác */
-    padding: 12px 24px; /* Tăng kích thước nút */
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Danh mục sản phẩm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        table {
+            width: 90%;
+            height: 60px;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        .btn-approve {
+            background-color: #4CAF50;
+        }
+        .btn-reject {
+            background-color: #f44336;
+        }
+        .btn-approve:hover {
+            background-color: #45a049;
+        }
+        .btn-reject:hover {
+            background-color: #d32f2f;
+        }
+        .message {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .message.success {
+            color: green;
+        }
+        .message.error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-	<%@include file="header.jsp"%>
+    <%@ include file="header.jsp" %>
 
-	<div class="history-table">
-		<h2>Danh mục sản phẩm</h2>
+    <h2>Danh mục sản phẩm</h2>
 
-		<!-- Form tìm kiếm -->
-		<form action="ProductSearchServlet" method="GET"
-			style="margin-bottom: 20px;">
-			<label for="searchKey">Tìm kiếm:</label> <input type="text"
-				id="searchKey" name="searchKey"
-				placeholder="Nhập mã hoặc tên danh mục..."
-				style="padding: 8px; margin-right: 10px;"> <label
-				for="filter">Sắp xếp theo:</label> <select id="filter" name="filter"
-				style="padding: 8px; margin-right: 10px;">
-				<option value="all">Tất cả</option>
-				<option value="id">Danh mục</option>
-				<option value="name">Mã danh mục</option>
-				<option value="price">Số lượng tăng dần</option>
-				<option value="price">Số lương giảm dầm</option>
-				<option value="latest">Mới nhất</option>
-			</select>
+    <!-- Hiển thị thông báo -->
+    <c:if test="${not empty succMsg}">
+        <div class="message success">${succMsg}</div>
+        <c:remove var="succMsg" scope="session"/>
+    </c:if>
+    <c:if test="${not empty failMsg}">
+        <div class="message error">${failMsg}</div>
+        <c:remove var="failMsg" scope="session"/>
+    </c:if>
+	<form action="CategorySearchServlet" method="get" style="display: flex; align-items: center; margin-bottom: 20px;">
+	<form action="${pageContext.request.contextPath}/admin/CategorySearchServlet" method="get">
 
-			<button type="submit"
-				style="padding: 8px 16px; background-color: #4CAF50; color: white; border: none; border-radius: 5px;">Tìm
-				kiếm</button>
-		</form>
-		<table>
-			<thead>
-				<tr>
+	
+    <!-- Ô tìm kiếm -->
+    <label for="keyword" style="margin-right: 10px;">Tìm kiếm:</label>
+    <input type="text" id="keyword" name="keyword" placeholder="Nhập mã danh mục hoặc tên danh mục"
+           value="${keyword}" style="padding: 8px; width: 250px; margin-right: 15px;">
 
-					<th>Mã danh mục</th>
-					<th>Tên danh mục</th>
-					<th>Số lượng sản phẩm</th>
-					<th>Hình ảnh</th>
-					<th>Thời gian tạo</th>
-					<th>Thời gian cập nhật</th>
-					<th>Thao tác</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>SP1</td>
-					<td>Bánh</td>
-					<td>0</td>
-					<td>Hình ảnh</td>
-					<td>Thời gian tạo</td>
-					<td>Thời gian cập nhật</td>
-					<td><a href="update_category.jsp" class="button btn-approve">Chỉnh sửa</a> <a
-						href="javascript:void(0);" class="button btn-reject"<%-- onclick="confirmDelete('deleteUser.jsp?id=<%= user.getId() %>') --%>">Xóa</a>
-					</td>
+    <!-- Dropdown sắp xếp -->
+    <label for="sort">Sắp xếp theo:</label>
+    <select id="sort" name="sort" style="padding: 8px; margin-left: 10px; margin-right: 15px;">
+        <option value="all" ${sort == 'all' ? 'selected' : ''}>Tất cả</option>
+        <option value="name_asc" ${sort == 'name_asc' ? 'selected' : ''}>Tên (A-Z)</option>
+        <option value="name_desc" ${sort == 'name_desc' ? 'selected' : ''}>Tên (Z-A)</option>
+        <option value="date_newest" ${sort == 'date_newest' ? 'selected' : ''}>Mới nhất</option>
+        <option value="date_oldest" ${sort == 'date_oldest' ? 'selected' : ''}>Cũ nhất</option>
+    </select>
+
+    <!-- Nút tìm kiếm -->
+    <button type="submit" style="padding: 8px 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Tìm kiếm
+    </button>
+</form>
 
 
-				</tr>
+	
+    <!-- Hiển thị bảng danh mục -->
+    <table>
+        <thead>
+            <tr>
+                <th>Mã danh mục</th>
+                <th>Tên danh mục</th>
+                <th>Hình ảnh</th>
+                <th>Mô tả</th>
+                <th>Thời gian tạo</th>
+                <th>Thời gian cập nhật</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="category" items="${categories}">
+        <tr>
+            <td>${category.id}</td>
+            <td>${category.name}</td>
+            <td>
+                <c:if test="${not empty category.thumbnail}">
+                    <img src="${pageContext.request.contextPath}/uploads/category/${category.thumbnail}" alt="${category.name}" style="width: 50px; height: 50px;">
+                </c:if>
+            </td>
+            <td>${category.description}</td>
+            <td>${category.createdAt}</td>
+            <td>${category.updatedAt}</td>
+            <td>
+                <a href="update_category.jsp?id=${category.id}" class="button btn-approve">Sửa</a>
+                <a href="delete_category?id=${category.id}" class="button btn-reject">Xóa</a>
+            </td>
+        </tr>
+    </c:forEach>
+            <!-- Lấy danh sách từ database -->
+            <%
+                CategoryDAOImpl dao = new CategoryDAOImpl(DBConnect.getConn());
+                List<Category> categories = dao.getAllCategories();
+                for (Category category : categories) {
+            %>
+                <tr>
+                    <td><%= category.getId() %></td>
+                    <td><%= category.getName() %></td>
+                    <td>
+                        <img src="${pageContext.request.contextPath}/uploads/category/<%= category.getThumbnail() %>" alt="<%= category.getName() %>" style="width: 50px; height: 50px;">
 
+                    </td>
+                    <td><%= category.getDescription() %></td>
+                    <td><%= category.getCreatedAt() %></td>
+                    <td><%= category.getUpdatedAt() %></td>
+                    <td>
+                        <a href="update_category.jsp?id=<%= category.getId() %>" class="button btn-approve">Sửa</a>
+                        <a href="delete_category?id=<%= category.getId() %>" class="button btn-reject">Xóa</a>
+                    </td>
+                </tr>
+            <%
+                }
+            %>
+        </tbody>
+    </table>
 
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="11" style="text-align: center;"><a
-						href="add_category.jsp" class="button btn-approve"
-						style="font-size: 16px; padding: 10px 20px;">Thêm danh mục</a></td>
-				</tr>
-			</tfoot>
-		</table>
-	</div>
-
-	<!-- Hộp thoại xác nhận -->
-	<div id="confirm-dialog" style="display: none;">
-		<div
-			style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5);">
-			<div
-				style="background: white; padding: 20px; border-radius: 5px; width: 300px; margin: 15% auto; text-align: center;">
-				<p>Bạn có chắc chắn muốn xóa người dùng này?</p>
-				<div>
-					<button id="confirm-btn"
-						style="margin-right: 10px; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Xác
-						nhận</button>
-					<button onclick="closeDialog()"
-						style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Hủy</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-	<script>
-		let deleteUrl = "";
-
-		function confirmDelete(url) {
-			deleteUrl = url; // Lưu URL xóa vào biến
-			document.getElementById("confirm-dialog").style.display = "block";
-		}
-
-		function closeDialog() {
-			document.getElementById("confirm-dialog").style.display = "none";
-		}
-
-		document.getElementById("confirm-btn").onclick = function() {
-			// Điều hướng đến URL xóa
-			window.location.href = deleteUrl;
-		};
-	</script>
-
-
+    <!-- Nút thêm danh mục -->
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="add_category.jsp" class="button btn-approve" style="font-size: 16px; padding: 10px 20px;">Thêm danh mục</a>
+    </div>
 </body>
 </html>
