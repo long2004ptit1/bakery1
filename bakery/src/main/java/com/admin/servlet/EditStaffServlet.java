@@ -14,16 +14,25 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/EditStaffServlet")
 public class EditStaffServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Đọc dữ liệu từ form
         try {
+            // Đọc dữ liệu từ form
             int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name");
             String phone = request.getParameter("phone");
             String role = request.getParameter("role");
+            String username = request.getParameter("username");  // Mới thêm cột username
+            String password = request.getParameter("password");  // Mới thêm cột password
 
             // Xác thực dữ liệu đầu vào
-            if (name == null || name.isEmpty() || phone == null || phone.isEmpty() || role == null || role.isEmpty()) {
+            if (name == null || name.isEmpty() || phone == null || phone.isEmpty() || role == null || role.isEmpty() || username == null || username.isEmpty() || password == null || password.isEmpty()) {
                 request.setAttribute("error", "Vui lòng điền đầy đủ thông tin!");
+                request.getRequestDispatcher("edit_staff.jsp?id=" + id).forward(request, response);
+                return;
+            }
+
+            // Kiểm tra định dạng số điện thoại (có thể thay đổi theo yêu cầu của bạn)
+            if (!phone.matches("^[0-9]{10,11}$")) {  // Kiểm tra số điện thoại có từ 10 đến 11 chữ số
+                request.setAttribute("error", "Số điện thoại không hợp lệ!");
                 request.getRequestDispatcher("edit_staff.jsp?id=" + id).forward(request, response);
                 return;
             }
@@ -34,15 +43,17 @@ public class EditStaffServlet extends HttpServlet {
             staff.setName(name);
             staff.setPhone(phone);
             staff.setRole(role);
+            staff.setUsername(username);  // Thêm username
+            staff.setPassword(password);  // Thêm password
 
             // Gọi DAO để cập nhật
-            StaffDAOImpl staffDAOImpl = new StaffDAOImpl();
-            boolean isUpdated = staffDAOImpl.updateStaff(staff);
+            StaffDAO staffDAO = new StaffDAOImpl();
+            boolean isUpdated = staffDAO.updateStaff(staff);
 
             if (isUpdated) {
                 // Cập nhật thành công
                 request.setAttribute("success", "Cập nhật nhân viên thành công!");
-                response.sendRedirect("staff_list.jsp?success=1");
+                request.getRequestDispatcher("staff_list.jsp").forward(request, response);
             } else {
                 // Lỗi cập nhật
                 request.setAttribute("error", "Cập nhật thất bại. Vui lòng thử lại!");

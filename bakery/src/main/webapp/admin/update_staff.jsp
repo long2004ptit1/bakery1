@@ -13,21 +13,26 @@
     String name = request.getParameter("name");
     String phone = request.getParameter("phone");
     String role = request.getParameter("role");
+    String username = request.getParameter("username");
+    String password = request.getParameter("password");
 
-    // Cập nhật nhân viên
+    // Tạo đối tượng Staff và cập nhật thông tin
     StaffDAO staffDAO = new StaffDAOImpl();
     Staff staff = new Staff();
     staff.setId(id);
     staff.setName(name);
     staff.setPhone(phone);
     staff.setRole(role);
+    staff.setUsername(username);  // Thêm trường username
+    staff.setPassword(password);  // Thêm trường password
 
-    boolean isUpdated = staffDAO.updateStaff(staff); // Gọi phương thức DAO để cập nhật
+    // Gọi phương thức DAO để cập nhật
+    boolean isUpdated = staffDAO.updateStaff(staff);
 
     if (isUpdated) {
-        response.sendRedirect("staff_list.jsp?success=1");
+        response.sendRedirect("staff_list.jsp?success=1"); // Thành công
     } else {
-        response.sendRedirect("edit_staff.jsp?id=" + id + "&error=1");
+        response.sendRedirect("edit_staff.jsp?id=" + id + "&error=1"); // Lỗi
     }
 %>
 </body>

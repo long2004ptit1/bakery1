@@ -81,26 +81,27 @@
         .form-container .back-link:hover {
             text-decoration: underline;
         }
+        
         .form-container select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    background-color: #f9f9f9;
-    appearance: none; /* Xóa mũi tên mặc định */
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB...'); /* Hình mũi tên */
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    cursor: pointer;
-}
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            appearance: none;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB...'); 
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            cursor: pointer;
+        }
 
-.form-container select:focus {
-    border-color: #007bff;
-    outline: none;
-}
+        .form-container select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
         
     </style>
 </head>
@@ -113,7 +114,7 @@
     String success = request.getParameter("success");
     if ("1".equals(error)) {
 %>
-        <p style="color: red; text-align: center;">Thêm nhân viên thất bại. Vui lòng kiểm tra lại!</p>
+        <p style="color: red; text-align: center;">Thêm nhân viên thất bại. Số điện thoại đã được sử dụng!</p>
 <%
     } else if ("1".equals(success)) {
 %>
@@ -131,13 +132,17 @@
             <input type="text" id="phone" name="phone" placeholder="Nhập số điện thoại" required>
 
             <label for="role">Vai trò:</label>
-<select id="role" name="role" required>
-    <option value="Nhân viên">Nhân viên</option>
-    <option value="Quản lý">Quản lý</option>
-    <option value="Giám sát">Giám sát</option>
-    
-</select>
+            <select id="role" name="role" required>
+                <option value="Nhân viên">Nhân viên</option>
+                <option value="Quản lý">Quản lý</option>
+                <option value="Giám sát">Giám sát</option>
+            </select>
 
+            <label for="username">Tên đăng nhập:</label>
+            <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
+
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
 
             <button type="submit">Thêm Nhân Viên</button>
         </form>
