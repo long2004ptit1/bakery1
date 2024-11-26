@@ -4,19 +4,13 @@ import com.entity.Staff;
 import java.util.List;
 
 public interface StaffDAO {
-    boolean addStaff(Staff staff); // Thêm nhân viên
-    List<Staff> getAllStaff();     // Lấy danh sách nhân viên
-
-
-    // Lấy thông tin nhân viên theo ID
-    Staff getStaffById(int id);
-    
- // Xóa nhân viên theo ID
-    boolean deleteStaff(int id);
-
-    // Cập nhật thông tin nhân viên
+    boolean addStaff(Staff staff);
     boolean updateStaff(Staff staff);
-
-    // Kiểm tra số điện thoại đã tồn tại
+    boolean deleteStaff(int id);
+    List<Staff> getAllStaff();
+    Staff getStaffById(int id);
     boolean isPhoneExists(String phone);
+    List<Staff> searchStaff(String keyword, String filter);
+
+    
 }

@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Chỉnh sửa thông tin nhân viên</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -41,7 +42,7 @@
             color: #555;
         }
 
-        input[type="text"], select {
+        input[type="text"], input[type="password"], select {
             padding: 10px;
             font-size: 14px;
             margin-bottom: 20px;
@@ -50,7 +51,7 @@
             transition: border-color 0.3s;
         }
 
-        input[type="text"]:focus, select:focus {
+        input[type="text"]:focus, input[type="password"]:focus, select:focus {
             border-color: #007BFF;
             outline: none;
         }
@@ -86,6 +87,19 @@
             text-decoration: underline;
         }
 
+        .password-container {
+            position: relative;
+        }
+
+        .password-container i {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #555;
+        }
+
         @media (max-width: 768px) {
             .form-container {
                 width: 90%;
@@ -104,18 +118,23 @@
     </style>
 </head>
 <body>
+
 <%@ include file="header.jsp" %>
 
 <%
     int id = Integer.parseInt(request.getParameter("id"));
     StaffDAO staffDAO = new StaffDAOImpl();
     Staff staff = staffDAO.getStaffById(id);
+    if (staff == null) {
+        response.sendRedirect("staff_list.jsp");
+        return;
+    }
 %>
 
 <div class="form-container">
     <h2>Chỉnh sửa thông tin nhân viên</h2>
 
-    <form action="update_staff.jsp" method="post">
+    <form action="update_staff.jsp" method="post">  <!-- Sử dụng POST để gửi dữ liệu -->
         <input type="hidden" name="id" value="<%= staff.getId() %>">
 
         <label for="name">Họ tên:</label>
@@ -131,6 +150,15 @@
             <option value="supervisor" <%= staff.getRole().equals("supervisor") ? "selected" : "" %>>Giám sát</option>
         </select>
 
+        <label for="username">Tên đăng nhập:</label>
+        <input type="text" id="username" name="username" value="<%= staff.getUsername() != null ? staff.getUsername() : "" %>" required>
+
+        <label for="password">Mật khẩu:</label>
+        <div class="password-container">
+            <input type="password" id="password" name="password" value="<%= staff.getPassword() != null ? staff.getPassword() : "" %>" required>
+            <i id="togglePassword" class="fas fa-eye"></i>
+        </div>
+
         <button type="submit">Lưu thay đổi</button>
     </form>
 
@@ -138,6 +166,21 @@
         <a href="staff_list.jsp">Quay lại danh sách nhân viên</a>
     </div>
 </div>
+
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('password');
+
+    togglePassword.addEventListener('click', () => {
+        // Toggle giữa text và password
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+
+        // Đổi biểu tượng
+        togglePassword.classList.toggle('fa-eye');
+        togglePassword.classList.toggle('fa-eye-slash');
+    });
+</script>
 
 </body>
 </html>

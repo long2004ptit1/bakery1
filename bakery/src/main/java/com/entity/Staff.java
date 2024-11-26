@@ -3,13 +3,24 @@ package com.entity;
 import java.sql.Timestamp;
 
 public class Staff {
-    private int id;                // Khóa chính
-    private String name;           // Tên nhân viên
-    private String phone;          // Số điện thoại
-    private String role;           // Vai trò
-    private Timestamp createdAt;   // Thời gian tạo (dạng Timestamp)
+    private int id;
+    private String name;
+    private String username;
+    private String phone;
+    private String password;
+    private String role;  // Thêm thuộc tính role
+    private Timestamp createdAt;
 
-    // Getters và Setters
+    // Các getter và setter
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public int getId() {
         return id;
     }
@@ -26,6 +37,14 @@ public class Staff {
         this.name = name;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -34,19 +53,19 @@ public class Staff {
         this.phone = phone;
     }
 
-    public String getRole() {
-        return role;
+    public String getPassword() {
+        return password;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Timestamp getCreatedAt() {
-        return createdAt; // Kiểu trả về là Timestamp
+        return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) { // Sửa phương thức để nhận Timestamp
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 }
