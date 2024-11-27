@@ -44,7 +44,7 @@ h2 {
 
 .history-table {
 	white-space: nowrap; /* Không ngắt dòng */
-	width: 200px; /* Điều chỉnh chiều rộng theo ý muốn */
+	width: 200px; 
 }
 
 /*button  */
