@@ -19,47 +19,46 @@ import com.entity.Category;
 @WebServlet("/add_category")
 @MultipartConfig
 public class CategoryAdd extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		try {
-			// Lấy các tham số từ form
-			String id = req.getParameter("id");
-			String name = req.getParameter("name");
-			String description = req.getParameter("description");
-			Part part = req.getPart("thumbnail");
-			String fileName = part.getSubmittedFileName(); // Tên file hình ảnh
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            String id = req.getParameter("id");
+            String name = req.getParameter("category");
+            String description = req.getParameter("description");
+            Part part = req.getPart("thumbnail");
+            String fileName = part.getSubmittedFileName();
 
-			HttpSession session = req.getSession();
+            // Đường dẫn lưu ảnh
+            String uploadPath = getServletContext().getRealPath("") + "uploads" + File.separator + "category";
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
 
-			// Sử dụng DAO để kiểm tra mã danh mục
-			CategoryDAOImpl dao = new CategoryDAOImpl(DBConnect.getConn());
-			if (dao.isCategoryExists(id)) {
-				// Mã danh mục đã tồn tại, gửi thông báo lỗi
-				session.setAttribute("failMsg", "Mã danh mục đã tồn tại!");
-				resp.sendRedirect("admin/add_category.jsp");
-				return;
-			}
+            // Lưu ảnh
+            part.write(uploadPath + File.separator + fileName);
 
-			// Nếu mã danh mục không tồn tại, tiếp tục thêm
-			Category category = new Category(id, name, description, fileName, null, null);
-			boolean f = dao.addCategory(category);
+            // Lưu vào cơ sở dữ liệu
+            CategoryDAOImpl dao = new CategoryDAOImpl(DBConnect.getConn());
+            Category category = new Category(id, name, description, fileName, null, null);
+            boolean isAdded = dao.addCategory(category);
 
-			if (f) {
-				// Lưu file hình ảnh vào thư mục "uploads"
-				String path = getServletContext().getRealPath("") + "category";
-				File file = new File(path);
-				if (!file.exists()) {
-					file.mkdir();
-				}
-				part.write(path + File.separator + fileName);
-
-				// Gửi thông báo thành công
-				session.setAttribute("succMsg", "Thêm danh mục thành công");
-				resp.sendRedirect("admin/add_category.jsp");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            HttpSession session = req.getSession();
+            if (isAdded) {
+                session.setAttribute("succMsg", "Thêm danh mục thành công!");
+                resp.sendRedirect("admin/all_category.jsp");
+            } else {
+                session.setAttribute("failMsg", "Thêm danh mục thất bại!");
+                resp.sendRedirect("admin/add_category.jsp");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            req.getSession().setAttribute("failMsg", "Có lỗi xảy ra!");
+            resp.sendRedirect("admin/add_category.jsp");
+        }
+    }
 }
+
+	
